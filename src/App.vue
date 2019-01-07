@@ -1,17 +1,15 @@
-<template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
-  </div>
+<template lang="pug">
+  #app
+    ProductList
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import ProductList from './components/ProductList'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    ProductList
   }
 }
 </script>
