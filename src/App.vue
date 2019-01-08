@@ -1,15 +1,19 @@
-<template lang="pug">
-  #app
-    ProductList
+<template>
+  <div id="app">
+    <ProductList/>
+    <hr>
+    <ShoppingCart/>
+  </div>
 </template>
 
 <script>
 import ProductList from './components/ProductList'
-
+import ShoppingCart from './components/ShoppingCart'
 export default {
   name: 'app',
   components: {
-    ProductList
+    ProductList,
+    ShoppingCart
   }
 }
 </script>
