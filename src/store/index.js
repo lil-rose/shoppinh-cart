@@ -8,6 +8,7 @@ export default new Vuex.Store({
     state: { //data
         products: [],
         cart: [],
+        checkoutStatus : null,
     },
 
     getters: { //computed properties
@@ -37,7 +38,13 @@ export default new Vuex.Store({
             */ // Lo mismo que sale abajo pero más fácil de entender
             return getters.cartProducts.reduce((total, product) => total + product.price * product.quantity, 0)
 
-        }
+        },
+
+        productInStock(){
+            return(product) =>{
+                return product.inventory > 0
+            }
+        },
     },
 
     actions: { // methods
@@ -63,19 +70,40 @@ export default new Vuex.Store({
             
         },
 
-        addProductToCart(context, product){
-            if (product.inventory > 0){
-                const cartItem = context.state.cart.find(item => item.id === product.id)
+        addProductToCart({state, getters, commit}, product){
+            //addProductToCart(context, product){
+            if (getters.productInStock(product)){
+                const cartItem = state.cart.find(item => item.id === product.id)
                 if(!cartItem){
-                    context.commit('pushProductToCart', product.id)
+                    commit('pushProductToCart', product.id)
                 }else{
-                    context.commit('incrementItemQuantity', cartItem)
+                    commit('incrementItemQuantity', cartItem)
                 }
-                context.commit('decrementProductInventory', product)
+                commit('decrementProductInventory', product)
             }else{
                 // show message
             }
+        },
+
+        checkout({state, commit}){
+            /**
+             * We can use ES6 argument destructuring (this way: {argument})
+             * to grab only the properties we need from the context object.
+             * 
+             * (así evitamos hacer context.state y context.commit y accedemos a ellos directamente)
+             */
+            shop.buyProducts(
+                state.cart,
+                () => {
+                    commit('emptyCart')
+                    commit('setCheckoutStatus', 'success')
+                },
+                () => {
+                    commit('setCheckoutStatus', 'fail')
+                }
+            )
         }
+
     },
 
     mutations: { // responsables de c/u de los cambios al state
@@ -101,6 +129,14 @@ export default new Vuex.Store({
 
         decrementProductInventory(state, product){
             product.inventory--
+        },
+
+        emptyCart(state){
+            state.cart = []
+        },
+
+        setCheckoutStatus(state, status){
+            state.checkoutStatus = status
         },
     }
 })
