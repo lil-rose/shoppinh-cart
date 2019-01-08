@@ -16,18 +16,19 @@ import {mapState, mapGetters, mapActions} from 'vuex'
 
 export default {
     computed:{
-        ...mapGetters({ // Mapenado como objetos
+        ...mapGetters('cart', { // Mapenado como objetos
+            // 'cart' es el namespace
             products: 'cartProducts',
             total: 'cartTotal'
         }),
 
-        ...mapState({
-            checkoutStatus: state => state.cart.checkoutStatus,
+        ...mapState('cart', {
+            checkoutStatus: state => state.checkoutStatus,
         })
     },
 
     methods:{
-        ...mapActions({
+        ...mapActions('cart', {
             checkout: 'checkout',
             addProductToCart: 'addProductToCart'
         }),

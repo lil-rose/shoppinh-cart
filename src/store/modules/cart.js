@@ -1,12 +1,13 @@
 import shop from "@/api/shop";
 
 export default{
+    namespaced: true,
     state: {
         items: [],
         checkoutStatus : null,
     },
     getters: {
-        cartProducts(state, getters, rootState){
+        cartProducts(state, getters, rootState, rootGetters){ // roots son para acceder cosas globales
             return state.items.map(cartItem =>{
                 const product = rootState.products.items.find(product => product.id === cartItem.id)
                 return{
@@ -53,16 +54,16 @@ export default{
     },
 
     actions:{
-        addProductToCart({state, getters, commit, rootState}, product){
+        addProductToCart({state, getters, commit, rootState, rootGetters}, product){
             //addProductToCart(context, product){
-            if (getters.productInStock(product)){
+            if (rootGetters['products/productInStock'](product)){ // necesito rootGetters porque ese getter esta afuera
                 const cartItem = state.items.find(item => item.id === product.id)
                 if(!cartItem){
                     commit('pushProductToCart', product.id)
                 }else{
                     commit('incrementItemQuantity', cartItem)
                 }
-                commit('decrementProductInventory', product)
+                commit('products/decrementProductInventory', product, {root:true}) // OJO ACÁ PARA NO PERDERME CON LAS COSAS NESTEADAS
             }else{
                 // show message
             }

@@ -31,16 +31,17 @@ export default {
      */
     //computed: mapState(['products']),
     computed: {
-        ...mapState({
+        ...mapState({ // Aqui le podemos pasar el namespace como primer parametro, pero meh
             //allProducts: 'products',
             products: state => state.products.items,
 
-            specificProduct(state){
+            /*specificProduct(state){
                 return state.products[this.productIndex]
             }
+            */
         }),
 
-        ...mapGetters({
+        ...mapGetters('products', {
             productIsInStock: 'productInStock'
         })
 
@@ -76,8 +77,8 @@ export default {
     },
     methods:{
         ...mapActions({
-            fetchProducts: 'fetchProducts',
-            addProductToCart: 'addProductToCart',
+            fetchProducts: 'products/fetchProducts', // ESTO IGUAL PODEMOS HACERLO CON NAMESPACE EN DOS mapActions separados
+            addProductToCart: 'cart/addProductToCart',
         }),
 
         // Así era antes de mapearlo:
