@@ -21,7 +21,7 @@ export default {
     data() {
         return {
             loading: false,
-            productInfex : 1
+            productIndex : 1
         }
     },
 
@@ -33,7 +33,8 @@ export default {
     computed: {
         ...mapState({
             //allProducts: 'products',
-            products: state => state.products,
+            products: state => state.products.items,
+
             specificProduct(state){
                 return state.products[this.productIndex]
             }

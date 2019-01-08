@@ -6,13 +6,13 @@
                 span {{product.title}} - {{product.price | currency}} - {{product.quantity}}
         
         p Total: {{total | currency}}
-        button(@click="$store.dispatch('checkout')") Checkout
+        button(@click="checkout") Checkout
         p(v-if="checkoutStatus")
         span {{checkoutStatus}}
 </template>
 
 <script>
-import {mapState, mapGetters} from 'vuex' 
+import {mapState, mapGetters, mapActions} from 'vuex' 
 
 export default {
     computed:{
@@ -21,9 +21,16 @@ export default {
             total: 'cartTotal'
         }),
 
-        ...mapState([ // Mapeando como array
-            'checkoutStatus'
-        ])
+        ...mapState({
+            checkoutStatus: state => state.cart.checkoutStatus,
+        })
+    },
+
+    methods:{
+        ...mapActions({
+            checkout: 'checkout',
+            addProductToCart: 'addProductToCart'
+        }),
     }
 
     /*
