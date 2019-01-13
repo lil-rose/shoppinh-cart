@@ -1,6 +1,6 @@
 # shopping-cart
 
-> My firs vuex app
+> My firs vuex app, based on the Vue.js course "Vuex for everyone" [(link here)](https://vueschool.io/courses/vuex-for-everyone)
 
 ## Build Setup
 
